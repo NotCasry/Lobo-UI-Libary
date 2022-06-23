@@ -80,6 +80,8 @@ function Lobo:ToggleUI()
 end
 
 function Lobo.CreateLibary(LibName, ThemeName)
+	warn("Using Lobo Base!")
+
 	local ScreenGui = new("ScreenGui")
 	local Main = new("Frame")
 	local MainHeader = new("Frame")
@@ -88,9 +90,9 @@ function Lobo.CreateLibary(LibName, ThemeName)
 	local MainOptions = new("Frame")
 	local OptionsListLayout = new("UIListLayout")
 	local Title = Instance.new("TextLabel")
-	
+
 	Lobo:Dragging(MainHeader, Main)
-	
+
 	--Names
 	ScreenGui.Name = LibaryName
 	Main.Name = "MAIN_FRAME"
@@ -110,10 +112,10 @@ function Lobo.CreateLibary(LibName, ThemeName)
 	MainOptions.Parent = Main
 	OptionsListLayout.Parent = MainOptions
 	Title.Parent = Main
-	
+
 	--Properties
 	ScreenGui.ResetOnSpawn = false
-	
+
 	Main.Size = UDim2.new(0.343, 0, 0.537, 0)
 	Main.Position = UDim2.new(0.014, 0, 0.442, 0)
 
@@ -122,14 +124,14 @@ function Lobo.CreateLibary(LibName, ThemeName)
 	MainHeader.Size = UDim2.new(1, 0, 0.143, 0)
 	MainHeader.Position = UDim2.new(0, 0, 0, 0)
 	MainHeader.BackgroundColor3 = Themes[ThemeName]["Header"]
-	
+
 	MainOptions.Size = UDim2.new(0.358, 0, 0.856, 0)
 	MainOptions.Position = UDim2.new(0, 0, 0.143, 0)
 	MainOptions.BorderSizePixel = 0
 	MainOptions.BackgroundColor3 = Themes[ThemeName]["Header"]
-	
+
 	OptionsListLayout.Padding = UDim.new(0, 25)
-	
+
 	Title.BackgroundTransparency = 1
 	Title.TextColor3 = Themes[ThemeName]["TextColor"]
 	Title.Font = Themes[ThemeName]["TextFont"]
@@ -140,35 +142,77 @@ function Lobo.CreateLibary(LibName, ThemeName)
 	Title.Text = LibName
 
 	local self = {}
-
-	function self:CreateSection(SectionName)
-		-- Create Section Here
-		local lo = {}
-
-		function lo:Button(ButtonName, ButtonDescription, ButtonFunction)
-		end
-
-		function lo:Label(LabelName, LabelText)
-		end
-
-		function lo:String(InputName, InputDescription)
-		end
-
-		function lo:Number(InputName, InputDescription)
-		end
-
-		function lo:Slider(SliderName, SliderDescription, MinimumValue, MaximumValue, SliderFunction)
-		end
-
-		function lo:Boolean(BooleanName, BooleanDescription, Boolean)
-		end
-
-		function lo:DropDown(DropDownName, DropDownDescription, DropDownTable, DropDownFunction)
-		end
-
-		return lo
-	end
 	
+	function self:CreateTab(TabName, TabIcon)
+		local Tab_Frame = new("Frame")
+
+		Tab_Frame.Name = TabName
+		Tab_Frame.Parent = MainOptions
+		local bo = {}
+		
+		function bo:CreateSection(SectionName)
+			local Section_Frame = new("Frame")
+
+			Section_Frame.Name = SectionName
+			Section_Frame.Parent = Tab_Frame
+
+			-- Create Section Here
+			local lo = {}
+
+			function lo:Button(ButtonName, ButtonDescription, ButtonFunction)
+				local Button = new("TextButton")
+				Button.Name = ButtonName
+				Button.TextColor3 = Themes[ThemeName]["TextColor"]
+				Button.Font = Themes[ThemeName]["TextFont"]
+				--Button.Size = UDim2.new(0.242, 0, 0.104, 0)
+				--Button.Position = UDim2.new(0.022, 0, 0.018, 0)
+				Button.TextSize = 35
+				Button.Text = ButtonName
+
+				local UI_CORNER = new("UICorner")
+				UI_CORNER.Name = "UI_CORNER"
+				UI_CORNER.Parent = Button
+			end
+
+			function lo:Label(LabelName, LabelText)
+				local Text = new("TextLabel")
+				Text.BackgroundTransparency = 1
+				Text.TextColor3 = Themes[ThemeName]["TextColor"]
+				Text.Font = Themes[ThemeName]["TextFont"]
+				--Text.Size = UDim2.new(0.242, 0, 0.104, 0)
+				--Text.Position = UDim2.new(0.022, 0, 0.018, 0)
+				Text.TextSize = 35
+				Text.Text = LibName
+			end
+
+			function lo:String(InputName, InputDescription)
+				local TextBox = new("TextBox")
+
+				TextBox.Name = InputName
+				TextBox.PlaceholderText = "Please add a string value!"
+			end
+
+			function lo:Number(InputName, InputDescription)
+				local TextBox = new("TextBox")
+
+				TextBox.Name = InputName
+				TextBox.PlaceholderText = "Please add a number value!"
+			end
+
+			function lo:Slider(SliderName, SliderDescription, MinimumValue, MaximumValue, SliderFunction)
+			end
+
+			function lo:Boolean(BooleanName, BooleanDescription, Boolean)
+			end
+
+			function lo:DropDown(DropDownName, DropDownDescription, DropDownTable, DropDownFunction)
+			end
+
+			return lo
+		end
+		return bo
+	end
+
 	input.InputBegan:Connect(function(input, gameProcessedEvent)
 		if not gameProcessedEvent then
 			if input.KeyCode == _G.CloseKey then
